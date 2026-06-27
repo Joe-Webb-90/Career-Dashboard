@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Joe Webb — Operations & Customer Success</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --surface2: #f8f9fb;
+  --surface3: #eef0f4;
+  --border: #e3e6ed;
+  --border2: #d1d6e0;
+  --accent: #2563eb;
+  --accent-glow: rgba(37,99,235,0.1);
+  --accent2: #7c3aed;
+  --gold: #d97706;
+  --green: #059669;
+  --red: #dc2626;
+  --orange: #ea580c;
+  --text: #111827;
+  --text-muted: #6b7280;
+  --text-dim: #9ca3af;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  top: -200px; left: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(37,99,235,0.03) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app { display: flex; min-height: 100vh; position: relative; z-index: 1; }
+
+.sidebar {
+  width: 228px; min-width: 228px;
+  background: #1e2130;
+  border-right: 1px solid #2a2f42;
+  display: flex; flex-direction: column;
+  position: sticky; top: 0; height: 100vh;
+  overflow-y: auto;
+}
+.sidebar-header {
+  padding: 26px 20px 18px;
+  border-bottom: 1px solid #2a2f42;
+}
+.sidebar-avatar {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 20px; font-weight: 700;
+  color: white; margin-bottom: 12px;
+  box-shadow: 0 0 20px rgba(37,99,235,0.35);
+}
+.sidebar-name { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: #f1f5f9; }
+.sidebar-role { font-size: 11px; color: #94a3b8; margin-top: 3px; line-height: 1.4; }
+.sidebar-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin-top: 10px; padding: 4px 10px;
+  background: rgba(37,99,235,0.15); border: 1px solid rgba(37,99,235,0.25);
+  border-radius: 20px; font-size: 10px; color: #93c5fd; font-weight: 600;
+}
+
+nav { padding: 14px 0; flex: 1; }
+.nav-section {
+  font-size: 10px; letter-spacing: 0.12em;
+  color: #475569; text-transform: uppercase;
+  padding: 14px 20px 5px; font-weight: 600;
+  font-family: var(--font-display);
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 20px; cursor: pointer;
+  color: #94a3b8; font-size: 13px; font-weight: 400;
+  border-left: 2px solid transparent;
+  transition: all 0.15s; user-select: none;
+}
+.nav-item:hover { color: #e2e8f0; background: rgba(255,255,255,0.04); }
+.nav-item.active {
+  color: #93c5fd;
+  background: linear-gradient(90deg, rgba(147,197,253,0.1), transparent);
+  border-left-color: #93c5fd;
+  font-weight: 500;
+}
+
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid #2a2f42;
+  font-size: 11px; color: #475569;
+  line-height: 1.5;
+}
+.linkedin-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 10px; padding: 7px 12px;
+  background: #0a66c2; border-radius: 8px;
+  color: white; font-size: 11px; font-weight: 600;
+  text-decoration: none; transition: background 0.15s;
+  font-family: var(--font-body);
+}
+.linkedin-btn:hover { background: #0958a8; }
+
+.main { flex: 1; overflow-y: auto; }
+.page { display: none; padding: 36px 40px; max-width: 1120px; animation: fadeUp 0.22s ease; }
+.page.active { display: block; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+
+.page-title { font-family: var(--font-display); font-size: 30px; font-weight: 800; color: var(--text); margin-bottom: 5px; letter-spacing: -0.02em; }
+.page-sub { color: var(--text-muted); font-size: 13px; margin-bottom: 30px; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+.card-title {
+  font-family: var(--font-display);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-muted); margin-bottom: 16px;
+}
+.card-accent {
+  background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+  border-color: #dbeafe;
+}
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 2px 9px; border-radius: 20px;
+  font-size: 11px; font-weight: 600;
+}
+.badge-blue { background: rgba(61,139,255,0.12); color: var(--accent); }
+.badge-green { background: rgba(45,212,160,0.12); color: var(--green); }
+.badge-gold { background: rgba(240,180,41,0.12); color: var(--gold); }
+.badge-purple { background: rgba(124,92,252,0.12); color: var(--accent2); }
+.badge-red { background: rgba(248,113,113,0.12); color: var(--red); }
+.badge-orange { background: rgba(251,146,60,0.12); color: var(--orange); }
+
+.progress-track {
+  background: #e5e7eb; border-radius: 99px;
+  height: 6px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; border-radius: 99px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transition: width 1s cubic-bezier(0.4,0,0.2,1);
+}
+.progress-fill.green { background: linear-gradient(90deg, var(--green), #059669); }
+.progress-fill.gold { background: linear-gradient(90deg, var(--gold), var(--orange)); }
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px;
+  position: relative; overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.stat-card::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  opacity: 0; transition: opacity 0.3s;
+}
+.stat-card:hover::after { opacity: 1; }
+.stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; font-family: var(--font-display); font-weight: 600; }
+.stat-value { font-family: var(--font-display); font-size: 36px; font-weight: 700; color: var(--text); line-height: 1; letter-spacing: -0.02em; }
+.stat-sub { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
+
+.welcome-bar {
+  background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+  border: 1px solid #dbeafe;
+  border-radius: var(--radius); padding: 26px 30px;
+  margin-bottom: 24px;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  position: relative; overflow: hidden;
+}
+.welcome-bar::before {
+  content: '';
+  position: absolute; top: -50%; right: -100px;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(37,99,235,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.welcome-name { font-family: var(--font-display); font-size: 24px; font-weight: 700; letter-spacing: -0.01em; color: #1e3a8a; }
+.welcome-sub { font-size: 13px; color: #4b5563; margin-top: 5px; line-height: 1.6; }
+
+.item-row {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 16px 0; border-bottom: 1px solid var(--border);
+}
+.item-row:last-child { border-bottom: none; }
+.item-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 5px; line-height: 1.45; }
+.item-meta { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+.item-impact { font-size: 13px; color: #374151; margin-top: 5px; line-height: 1.55; }
+
+.skill-row { margin-bottom: 18px; }
+.skill-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
+.skill-name { font-size: 13px; font-weight: 500; color: var(--text); }
+.skill-pct { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+
+.phase-card {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 18px;
+  position: relative;
+}
+.phase-card.active-phase {
+  border-color: var(--accent); background: #eff6ff;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.08);
+}
+.phase-label {
+  font-family: var(--font-display); font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.phase-title { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+.phase-goal { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; font-size: 13px; color: var(--text-muted); line-height: 1.45; }
+.phase-goal-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-top: 5px; flex-shrink: 0; }
+.phase-card.active-phase .phase-goal-dot { background: var(--accent); }
+
+.tool-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.tool-chip {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px;
+  display: flex; align-items: center; gap: 10px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.tool-chip:hover { border-color: var(--border2); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.tool-icon { font-size: 18px; flex-shrink: 0; }
+.tool-name { font-size: 12px; font-weight: 600; color: var(--text); }
+.tool-level { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+.acc-number {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: white; font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 2px;
+}
+
+.section-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.section-label { font-family: var(--font-display); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
+
+.flex { display: flex; } .flex-1 { flex: 1; } .items-center { align-items: center; }
+.justify-between { justify-content: space-between; } .gap-2 { gap: 8px; }
+.flex-wrap { flex-wrap: wrap; } .mt-4 { margin-top: 16px; } .mb-4 { margin-bottom: 16px; }
+.tag { display: inline-block; padding: 2px 7px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 4px; font-size: 11px; color: #6b7280; margin: 2px; }
+.divider { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
+
+.highlight-bar {
+  background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+  border: 1px solid #bbf7d0;
+  border-radius: var(--radius); padding: 20px 24px;
+  margin-bottom: 16px;
+  display: flex; gap: 16px; align-items: flex-start;
+}
+.highlight-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+.highlight-title { font-size: 14px; font-weight: 600; color: #065f46; margin-bottom: 3px; }
+.highlight-text { font-size: 13px; color: #064e3b; line-height: 1.55; }
+
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .page { padding: 20px 16px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .tool-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-avatar">J</div>
+    <div class="sidebar-name">Joe Webb</div>
+    <div class="sidebar-role">Customer Success & Operations<br>Lakewood, CO</div>
+    <div class="sidebar-badge">&#9733; Open to Opportunities</div>
+  </div>
+  <nav>
+    <div class="nav-section">Portfolio</div>
+    <div class="nav-item active" onclick="nav('overview',this)"><span>&#8862;</span> Overview</div>
+    <div class="nav-item" onclick="nav('accomplishments',this)"><span>&#9733;</span> Accomplishments</div>
+    <div class="nav-item" onclick="nav('tools',this)"><span>&#9685;</span> Tools & Skills</div>
+    <div class="nav-item" onclick="nav('dashboards',this)"><span>&#9670;</span> Built With AI</div>
+    <div class="nav-item" onclick="nav('roadmap',this)"><span>&#9711;</span> Career Roadmap</div>
+  </nav>
+  <div class="sidebar-footer">
+    <div style="color:#94a3b8;font-weight:600;font-size:12px;">Joe Webb</div>
+    <div style="margin-top:2px;">Operations & Customer Success<br>Lakewood, CO</div>
+    <a class="linkedin-btn" href="https://www.linkedin.com/in/josephdwebb90/" target="_blank" rel="noopener">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      Connect on LinkedIn
+    </a>
+    <div style="margin-top:12px;color:#334155;">Built with Claude AI<br>Last updated June 2026</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- OVERVIEW -->
+<div class="page active" id="page-overview">
+  <div class="welcome-bar">
+    <div>
+      <div class="welcome-name">Joe Webb &mdash; Customer Success & Operations</div>
+      <div class="welcome-sub">
+        10+ years leading ops, client relationships, and cross-functional teams in Colorado.<br>
+        I build with AI tools to move faster, communicate better, and create resources others actually use.
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-4" style="margin-bottom:20px;">
+    <div class="stat-card">
+      <div class="stat-label">Accounts Managed</div>
+      <div class="stat-value">50+</div>
+      <div class="stat-sub">active clients per month</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Client Rebook Rate</div>
+      <div class="stat-value">90%+</div>
+      <div class="stat-sub">across full book of business</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Avg. Response Time</div>
+      <div class="stat-value">&lt;10m</div>
+      <div class="stat-sub">same-day request turnaround</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Solo CS Coverage</div>
+      <div class="stat-value">2+ yrs</div>
+      <div class="stat-sub">sole point of contact, full book</div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:16px;">
+    <div class="card">
+      <div class="card-title">What I Do Best</div>
+      <div class="highlight-bar" style="margin-bottom:12px;">
+        <div class="highlight-icon">&#127942;</div>
+        <div>
+          <div class="highlight-title">Client Relationships at Scale</div>
+          <div class="highlight-text">Sole CS point of contact for 50+ monthly accounts for 2+ years -- personally handling all outreach, data management, communications, and final report delivery. Company maintains a 90%+ client rebook rate.</div>
+        </div>
+      </div>
+      <div class="highlight-bar" style="margin-bottom:12px;">
+        <div class="highlight-icon">&#9881;</div>
+        <div>
+          <div class="highlight-title">Process & Systems Building</div>
+          <div class="highlight-text">I don't just run processes -- I build them. From CRM workflows to automated dashboards, I find inefficiencies and fix them with tools that last.</div>
+        </div>
+      </div>
+      <div class="highlight-bar" style="margin-bottom:0;">
+        <div class="highlight-icon">&#129302;</div>
+        <div>
+          <div class="highlight-title">AI-Augmented Work</div>
+          <div class="highlight-text">I actively build with Claude, Cowork, Claude Design, and ChatGPT -- not just use them. Custom dashboards, automated workflows, and training resources for my team.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Career Snapshot</div>
+      <div class="item-row">
+        <div style="flex:1;">
+          <div class="item-title">Customer Success Manager & Operations</div>
+          <div class="item-meta">Mobile Health Diagnostics (MHD) &nbsp;&middot;&nbsp; 2021 &ndash; Present &nbsp;&middot;&nbsp; Broomfield, CO</div>
+          <div class="item-impact">Managing full CS and operations lifecycle for 50+ monthly accounts. Built custom dashboards, led CRM transitions (Salesforce to HubSpot), and trained staff on new platforms.</div>
+        </div>
+      </div>
+      <div class="item-row">
+        <div style="flex:1;">
+          <div class="item-title">General Manager</div>
+          <div class="item-meta">Wanna LLC &nbsp;&middot;&nbsp; 2014 &ndash; 2021 &nbsp;&middot;&nbsp; Denver, CO</div>
+          <div class="item-impact">Led multi-location retail operations including scheduling, payroll, inventory, POS rollout, and team development. Built and coached high-performing store teams.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ACCOMPLISHMENTS -->
+<div class="page" id="page-accomplishments">
+  <div class="page-title">Accomplishments</div>
+  <div class="page-sub">Key wins, outcomes, and impact across my career.</div>
+
+  <div class="grid-3" style="margin-bottom:20px;">
+    <div class="stat-card">
+      <div class="stat-label">Client Rebook Rate</div>
+      <div class="stat-value">90%+</div>
+      <div class="stat-sub">company-wide, 2021&ndash;present</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Same-Day Response</div>
+      <div class="stat-value">&lt;10m</div>
+      <div class="stat-sub">avg. turnaround on live requests</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Solo CS Coverage</div>
+      <div class="stat-value">2+ yrs</div>
+      <div class="stat-sub">50+ accounts, no additional support</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:16px;">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:12px;font-family:var(--font-display);">Current Role &mdash; MHD</div>
+    <div class="card" style="margin-bottom:12px;">
+      <div class="item-row" style="padding-top:0;">
+        <div class="acc-number">1</div>
+        <div style="flex:1;">
+          <div class="item-title">Managed a 4-person department's workload independently for nearly 2 years</div>
+          <div class="item-meta"><span class="badge badge-blue">Operations</span> &nbsp; 2023</div>
+          <div class="item-impact">Maintained full service quality and met all client deliverables during a critical staffing gap, eliminating the need for emergency hires and preserving client relationships.</div>
+        </div>
+      </div>
+      <div class="item-row">
+        <div class="acc-number">2</div>
+        <div style="flex:1;">
+          <div class="item-title">Built Excel macros that cut report prep time from 20 minutes to under 5 minutes</div>
+          <div class="item-meta"><span class="badge badge-purple">Process Improvement</span> &nbsp; 2022</div>
+          <div class="item-impact">Automated recurring reporting with 100% higher accuracy, freeing 1-2 hours per week that were redirected to client-facing work.</div>
+        </div>
+      </div>
+      <div class="item-row">
+        <div class="acc-number">3</div>
+        <div style="flex:1;">
+          <div class="item-title">Led full CRM transition from Salesforce to HubSpot across the team</div>
+          <div class="item-meta"><span class="badge badge-blue">Technology</span> &nbsp; 2025</div>
+          <div class="item-impact">Managed the platform switch, trained staff, rebuilt workflows, and ensured continuity for 50+ active accounts with no disruption to client service.</div>
+        </div>
+      </div>
+      <div class="item-row">
+        <div class="acc-number">4</div>
+        <div style="flex:1;">
+          <div class="item-title">Built 3 custom operational dashboards using AI tools</div>
+          <div class="item-meta"><span class="badge badge-purple">Process Improvement</span> &nbsp; 2025-2026</div>
+          <div class="item-impact">Created a Monday scorecard dashboard (auto-refreshing EOS metrics), a sales submission tracker (pricing and scheduling requests), and a turnaround time tracker with direct HubSpot links -- replacing manual lookups and reducing oversight gaps.</div>
+        </div>
+      </div>
+      <div class="item-row">
+        <div class="acc-number">5</div>
+        <div style="flex:1;">
+          <div class="item-title">Sole CS point of contact for 50+ monthly accounts for 2+ years with a 90%+ rebook rate</div>
+          <div class="item-meta"><span class="badge badge-green">Client Success</span> &nbsp; 2021 &ndash; Present</div>
+          <div class="item-impact">Personally handled all outreach, data management, client communications, and final report delivery across the full book of business with no additional support. Company maintains a 90%+ client rebook rate during this period.</div>
+        </div>
+      </div>
+      <div class="item-row">
+        <div class="acc-number">6</div>
+        <div style="flex:1;">
+          <div class="item-title">Trained 5 employees on CRM platforms, tools, and operational workflows</div>
+          <div class="item-meta"><span class="badge badge-gold">Leadership</span> &nbsp; 2022 &ndash; Present</div>
+          <div class="item-impact">Onboarded and trained team members on Salesforce, HubSpot, and internal processes, ensuring consistent standards and reducing ramp-up time.</div>
+        </div>
+      </div>
+      <div class="item-row">
+        <div class="acc-number">7</div>
+        <div style="flex:1;">
+          <div class="item-title">Redesigned CRM workflows to reduce manual steps and accelerate client turnaround</div>
+          <div class="item-meta"><span class="badge badge-green">Client Success</span> &nbsp; 2023</div>
+          <div class="item-impact">Streamlined internal processes across the CS team, reducing client response overhead and improving overall throughput.</div>
+        </div>
+      </div>
+      <div class="item-row">
+        <div class="acc-number">8</div>
+        <div style="flex:1;">
+          <div class="item-title">Served as primary liaison between field technicians, internal teams, and clients</div>
+          <div class="item-meta"><span class="badge badge-blue">Communication</span> &nbsp; 2022 &ndash; Present</div>
+          <div class="item-impact">Acted as the central coordination point for all service delivery, ensuring rapid issue resolution and smooth cross-functional communication.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:12px;margin-top:24px;font-family:var(--font-display);">Previous Role &mdash; Wanna LLC (General Manager, 2014-2021)</div>
+    <div class="card">
+      <div class="item-row" style="padding-top:0;">
+        <div class="acc-number">9</div>
+        <div style="flex:1;">
+          <div class="item-title">Directed POS system rollout across all store locations</div>
+          <div class="item-meta"><span class="badge badge-blue">Technology</span> &nbsp; 2019</div>
+          <div class="item-impact">Managed multi-location technology deployment ensuring compliance, accurate reporting, and near-zero disruption to daily operations.</div>
+        </div>
+      </div>
+      <div class="item-row">
+        <div class="acc-number">10</div>
+        <div style="flex:1;">
+          <div class="item-title">Optimized scheduling, payroll, and inventory to improve labor efficiency</div>
+          <div class="item-meta"><span class="badge badge-purple">Operations</span> &nbsp; 2018</div>
+          <div class="item-impact">Redesigned core operational processes, resulting in measurable labor cost savings and better floor coverage across locations.</div>
+        </div>
+      </div>
+      <div class="item-row">
+        <div class="acc-number">11</div>
+        <div style="flex:1;">
+          <div class="item-title">Built and coached high-performing retail teams</div>
+          <div class="item-meta"><span class="badge badge-gold">Leadership</span> &nbsp; 2014 &ndash; 2021</div>
+          <div class="item-impact">Developed team members through clear expectations, ongoing coaching, and conflict resolution, improving customer service scores and store performance.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOOLS & SKILLS -->
+<div class="page" id="page-tools">
+  <div class="page-title">Tools & Skills</div>
+  <div class="page-sub">Platforms I use daily and capabilities I bring to every role.</div>
+
+  <div class="grid-2" style="margin-bottom:16px;">
+    <div class="card">
+      <div class="card-title">Proficiency</div>
+
+      <div style="font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;margin-top:4px;">CRM & Operations Platforms</div>
+
+      <div class="skill-row">
+        <div class="skill-header"><span class="skill-name">HubSpot CRM</span><span class="skill-pct">75%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:75%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-header"><span class="skill-name">Salesforce</span><span class="skill-pct">85%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:85%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-header"><span class="skill-name">Zuper</span><span class="skill-pct">60%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:60%"></div></div>
+      </div>
+
+      <hr class="divider">
+      <div style="font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">AI & Automation Tools</div>
+
+      <div class="skill-row">
+        <div class="skill-header"><span class="skill-name">Claude (Anthropic)</span><span class="skill-pct">88%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:88%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-header"><span class="skill-name">Claude Cowork</span><span class="skill-pct">87%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:87%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-header"><span class="skill-name">Claude Design</span><span class="skill-pct">85%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:85%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-header"><span class="skill-name">ChatGPT & Other AI Platforms</span><span class="skill-pct">86%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:86%"></div></div>
+      </div>
+
+      <hr class="divider">
+      <div style="font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">Core Professional Skills</div>
+
+      <div class="skill-row">
+        <div class="skill-header"><span class="skill-name">Customer Success & Client Retention</span><span class="skill-pct">93%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:93%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-header"><span class="skill-name">High-Volume Professional Communication</span><span class="skill-pct">90%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:90%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-header"><span class="skill-name">Process Optimization & Ops Efficiency</span><span class="skill-pct">91%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:91%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-header"><span class="skill-name">Cross-Functional Communication</span><span class="skill-pct">89%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:89%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-header"><span class="skill-name">Stakeholder Management</span><span class="skill-pct">86%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:86%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-header"><span class="skill-name">Client Onboarding & Enablement</span><span class="skill-pct">85%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:85%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-header"><span class="skill-name">CRM Management & Optimization</span><span class="skill-pct">82%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:82%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-header"><span class="skill-name">Team Leadership & Coaching</span><span class="skill-pct">84%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:84%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-header"><span class="skill-name">Advanced Excel (Macros, Automation)</span><span class="skill-pct">87%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:87%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-header"><span class="skill-name">Data Reporting & Analysis</span><span class="skill-pct">74%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:74%"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-header"><span class="skill-name">Microsoft 365 & Google Workspace</span><span class="skill-pct">80%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:80%"></div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title">Daily Platforms</div>
+        <div class="tool-grid">
+          <div class="tool-chip"><div class="tool-icon">&#128200;</div><div><div class="tool-name">HubSpot</div><div class="tool-level">Daily use</div></div></div>
+          <div class="tool-chip"><div class="tool-icon">&#9729;</div><div><div class="tool-name">Salesforce</div><div class="tool-level">2.5 yrs daily</div></div></div>
+          <div class="tool-chip"><div class="tool-icon">&#128295;</div><div><div class="tool-name">Zuper</div><div class="tool-level">Field ops</div></div></div>
+          <div class="tool-chip"><div class="tool-icon">&#129302;</div><div><div class="tool-name">Claude</div><div class="tool-level">Daily builder</div></div></div>
+          <div class="tool-chip"><div class="tool-icon">&#9965;</div><div><div class="tool-name">Claude Cowork</div><div class="tool-level">Daily use</div></div></div>
+          <div class="tool-chip"><div class="tool-icon">&#127912;</div><div><div class="tool-name">Claude Design</div><div class="tool-level">Active use</div></div></div>
+          <div class="tool-chip"><div class="tool-icon">&#129504;</div><div><div class="tool-name">ChatGPT</div><div class="tool-level">Regular use</div></div></div>
+          <div class="tool-chip"><div class="tool-icon">&#128202;</div><div><div class="tool-name">Excel Macros</div><div class="tool-level">Advanced</div></div></div>
+          <div class="tool-chip"><div class="tool-icon">&#128203;</div><div><div class="tool-name">Microsoft 365</div><div class="tool-level">Daily use</div></div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Role Targets</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
+          <span class="badge badge-blue">Operations Manager</span>
+          <span class="badge badge-green">Customer Success Manager</span>
+          <span class="badge badge-purple">Account Manager</span>
+          <span class="badge badge-gold">Office Manager</span>
+          <span class="badge badge-blue">Revenue Operations</span>
+          <span class="badge badge-green">CS Team Lead</span>
+        </div>
+        <div style="margin-top:16px;font-size:13px;color:var(--text-muted);line-height:1.6;">
+          Targeting remote and hybrid roles in the north Denver / Broomfield / Westminster corridor. Open to fully remote opportunities with the right team and scope.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BUILT WITH AI -->
+<div class="page" id="page-dashboards">
+  <div class="page-title">Built With AI</div>
+  <div class="page-sub">Operational tools and dashboards I've created using Claude and other AI platforms.</div>
+
+  <div style="margin-bottom:16px;">
+    <div class="card" style="margin-bottom:12px;">
+      <div style="display:flex;align-items:flex-start;gap:16px;">
+        <div style="font-size:28px;flex-shrink:0;">&#128197;</div>
+        <div style="flex:1;">
+          <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:5px;">Monday Morning Scorecard Dashboard</div>
+          <div style="margin-bottom:10px;"><span class="badge badge-green">Active</span> &nbsp;<span class="tag">EOS / My90</span><span class="tag">Auto-refresh</span><span class="tag">Metrics</span></div>
+          <div style="font-size:13px;color:var(--text-muted);line-height:1.6;">
+            Automatically refreshes every Monday morning with all scorecard metrics from our EOS platform (My90). Eliminates the need to manually pull numbers at the start of each week and ensures the team starts with accurate data from day one.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:12px;">
+      <div style="display:flex;align-items:flex-start;gap:16px;">
+        <div style="font-size:28px;flex-shrink:0;">&#128200;</div>
+        <div style="flex:1;">
+          <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:5px;">Sales Submission & Pricing/Scheduling Tracker</div>
+          <div style="margin-bottom:10px;"><span class="badge badge-blue">Active</span> &nbsp;<span class="tag">HubSpot</span><span class="tag">Pricing</span><span class="tag">Scheduling</span></div>
+          <div style="font-size:13px;color:var(--text-muted);line-height:1.6;">
+            Tracks all jobs submitted from the sales team for pricing and scheduling requests. Gives me a single view of what's in queue, what needs action, and what's been handled. I'm personally responsible for providing pricing and scheduling for our services.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:12px;">
+      <div style="display:flex;align-items:flex-start;gap:16px;">
+        <div style="font-size:28px;flex-shrink:0;">&#9201;</div>
+        <div style="flex:1;">
+          <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:5px;">Turnaround Time & Metrics Tracker</div>
+          <div style="margin-bottom:10px;"><span class="badge badge-purple">Active</span> &nbsp;<span class="tag">HubSpot</span><span class="tag">Turnaround</span><span class="tag">Performance</span></div>
+          <div style="font-size:13px;color:var(--text-muted);line-height:1.6;">
+            Tracks how long each request has been pending action, the full turnaround time from submission to completion, and includes direct HubSpot links to find the underlying data quickly. Same-day requests average under 10 minutes from submission to response. Replaces spreadsheet-based tracking and makes performance review straightforward.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;align-items:flex-start;gap:16px;">
+        <div style="font-size:28px;flex-shrink:0;">&#127775;</div>
+        <div style="flex:1;">
+          <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:5px;">This Portfolio Dashboard</div>
+          <div style="margin-bottom:10px;"><span class="badge badge-gold">Personal</span> &nbsp;<span class="tag">Claude</span><span class="tag">HTML</span><span class="tag">Career</span></div>
+          <div style="font-size:13px;color:var(--text-muted);line-height:1.6;">
+            Built entirely with Claude AI as a portfolio tool and career tracker. Demonstrates hands-on comfort building with AI beyond simple prompts, including designing interactive layouts, managing structured data, and shipping shareable outputs.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ROADMAP -->
+<div class="page" id="page-roadmap">
+  <div class="page-title">Career Roadmap</div>
+  <div class="page-sub">A 5-year trajectory from where I am to where I'm going.</div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;">
+    <div class="phase-card active-phase">
+      <div class="phase-label">Phase 1 &nbsp;&middot;&nbsp; 2025 &ndash; 2026</div>
+      <div class="phase-title">Consolidate & Build Systems</div>
+      <div class="phase-goal"><div class="phase-goal-dot"></div><div>Document all key CS and ops processes</div></div>
+      <div class="phase-goal"><div class="phase-goal-dot"></div><div>Refresh LinkedIn and external presence</div></div>
+      <div class="phase-goal"><div class="phase-goal-dot"></div><div>Complete a CS or ops certification</div></div>
+      <div class="phase-goal"><div class="phase-goal-dot"></div><div>Lead a cross-functional initiative</div></div>
+      <div style="margin-top:12px;"><span class="badge badge-blue">Active Phase</span></div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-label">Phase 2 &nbsp;&middot;&nbsp; 2026 &ndash; 2027</div>
+      <div class="phase-title">Expand Scope & Visibility</div>
+      <div class="phase-goal"><div class="phase-goal-dot" style="background:#9ca3af;"></div><div>Take on a team lead or mentor role</div></div>
+      <div class="phase-goal"><div class="phase-goal-dot" style="background:#9ca3af;"></div><div>Present at a client QBR or industry event</div></div>
+      <div class="phase-goal"><div class="phase-goal-dot" style="background:#9ca3af;"></div><div>Manage a cross-functional project end-to-end</div></div>
+      <div class="phase-goal"><div class="phase-goal-dot" style="background:#9ca3af;"></div><div>Build 10 strategic external relationships</div></div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-label">Phase 3 &nbsp;&middot;&nbsp; 2027 &ndash; 2029</div>
+      <div class="phase-title">Senior / Director-Level Move</div>
+      <div class="phase-goal"><div class="phase-goal-dot" style="background:#9ca3af;"></div><div>Transition to Senior CSM or Director of Operations</div></div>
+      <div class="phase-goal"><div class="phase-goal-dot" style="background:#9ca3af;"></div><div>Build and lead a team of 3+</div></div>
+      <div class="phase-goal"><div class="phase-goal-dot" style="background:#9ca3af;"></div><div>Own a key account segment or business unit</div></div>
+      <div class="phase-goal"><div class="phase-goal-dot" style="background:#9ca3af;"></div><div>Establish thought leadership externally</div></div>
+    </div>
+  </div>
+
+  <div class="card card-accent">
+    <div class="card-title">What I'm Looking For Right Now</div>
+    <div style="font-size:14px;color:#1e3a8a;line-height:1.7;">
+      A remote or hybrid role in operations, customer success, or account management with a team that values systems thinking, strong communication, and initiative. I thrive in high-accountability environments where I can build things that make the whole team more effective, not just manage existing workflows.
+    </div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<script>
+function nav(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
